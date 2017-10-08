@@ -11,6 +11,8 @@ public class Criteria<E> {
 		criteria.put(searchCriteria, value);
 	}
 	
-	// you may add your own code here
+	public Map<E, Object> getAllCriteria(){
+		return criteria;
+	}
 
 }
