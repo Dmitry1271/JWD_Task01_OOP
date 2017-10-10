@@ -56,9 +56,10 @@ public class ApplianceDAOImpl implements ApplianceDAO {
         }
 
         Map<E, Object> allCriteria = criteria.getAllCriteria();
+        String value;
 
         for (Object key : allCriteria.keySet()) {
-            String value = ParameterValueFounder.findValue(line, key.toString());
+            value = ParameterValueFounder.findValue(line, key.toString());
             if (!value.equalsIgnoreCase(String.valueOf(allCriteria.get(key)).trim())) {
                 return false;
             }
