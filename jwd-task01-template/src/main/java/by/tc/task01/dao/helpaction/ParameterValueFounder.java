@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 public final class ParameterValueFounder {
 
     public static String findValue(String line, String parameterName) {
-        Pattern pattern = Pattern.compile(parameterName + "=[0-9a-zA-Z\\.-_]+");
+        Pattern pattern = Pattern.compile(parameterName + "=[0-9a-zA-Z\\.-]+");
         Matcher matcher = pattern.matcher(line);
         matcher.find();
         return matcher.group().split("=")[1];
