@@ -101,7 +101,7 @@ public class TabletPC extends Appliance implements Serializable {
 
     @Override
     public String toString() {
-        return "TabletPC{" +
+        return "TabletPCCreator{" +
                 "batteryCapacity=" + batteryCapacity +
                 ", displayInches=" + displayInches +
                 ", memoryRom=" + memoryRom +

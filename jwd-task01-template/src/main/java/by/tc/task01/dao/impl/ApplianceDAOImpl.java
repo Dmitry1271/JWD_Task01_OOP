@@ -1,10 +1,11 @@
 package by.tc.task01.dao.impl;
 
 import by.tc.task01.dao.ApplianceDAO;
-import by.tc.task01.dao.helpaction.ApplianceCreator;
-import by.tc.task01.dao.helpaction.CriteriaTypeRecognizer;
-import by.tc.task01.dao.parse.ApplicationParser;
-import by.tc.task01.dao.parse.helpaction.ParameterValueFounder;
+import by.tc.task01.dao.creator.ApplianceDirector;
+import by.tc.task01.dao.creator.Command;
+import by.tc.task01.dao.parse.ParseDirector;
+import by.tc.task01.dao.parse.ParserCommand;
+import by.tc.task01.dao.helpaction.ParameterValueFounder;
 import by.tc.task01.entity.Appliance;
 import by.tc.task01.entity.criteria.Criteria;
 
@@ -13,30 +14,30 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ApplianceDAOImpl implements ApplianceDAO {
-    private static final String path = "D:\\JavaProjects\\traning\\JWD_Task01_OOP\\jwd-task01-template\\src\\main\\resources\\appliances_db.txt";
+    private static final String path = "D:\\JavaProjects\\training\\JWD_Task01_OOP\\jwd-task01-template\\src\\main\\resources\\appliances_db.txt";
 
     @Override
     public <E> Appliance find(Criteria<E> criteria) {
-        String criteriaType = CriteriaTypeRecognizer.findOutCriteriaType(criteria);
+        String applianceType = criteria.getApplianceType();
         BufferedReader bufferedReader = null;
         Appliance appliance = null;
+        Command command = new ApplianceDirector().getCommand(applianceType);
+        ParserCommand parserCommand = new ParseDirector().getParserCommand(applianceType);
         try {
             bufferedReader = new BufferedReader(new FileReader(path));
             String line;
 
             while ((line = bufferedReader.readLine()) != null) {
-                if (!"".equals(line) && isFound(criteria, criteriaType, line)) {
-                    List<String> parameters = ApplicationParser.getParameters(line, criteriaType);
-                    appliance = ApplianceCreator.createApplianceBasedString(criteriaType, parameters);
+                if (!"".equals(line) && isFound(criteria, applianceType, line)) {
+                    List<String> parameters = parserCommand.execute(line);
+                    appliance = command.execute(parameters);
                     break;
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            return null;
         } finally {
             if (bufferedReader != null) {
                 try {
@@ -55,12 +56,10 @@ public class ApplianceDAOImpl implements ApplianceDAO {
         }
 
         Map<E, Object> allCriteria = criteria.getAllCriteria();
-        Pattern pattern;
-        Matcher matcher;
+
         for (Object key : allCriteria.keySet()) {
-            pattern = Pattern.compile(key + "=" + allCriteria.get(key) + "[,;]");
-            matcher = pattern.matcher(line);
-            if (!matcher.find()) {
+            String value = ParameterValueFounder.findValue(line, key.toString());
+            if (!value.equalsIgnoreCase(String.valueOf(allCriteria.get(key)).trim())) {
                 return false;
             }
         }
