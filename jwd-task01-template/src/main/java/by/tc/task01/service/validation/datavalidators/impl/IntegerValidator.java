@@ -13,7 +13,7 @@ public class IntegerValidator implements DataValidator {
                 return (Integer) value > 0;
             } else {
                 try {
-                    return Integer.parseInt((String) value) > 0;
+                    return Integer.parseInt(((String) value).trim()) > 0;
                 } catch (NumberFormatException e) {
                     return false;
                 }

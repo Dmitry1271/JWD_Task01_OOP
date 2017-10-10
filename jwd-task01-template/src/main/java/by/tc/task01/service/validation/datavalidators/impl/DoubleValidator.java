@@ -13,7 +13,7 @@ public class DoubleValidator implements DataValidator {
                 return ((Number) value).doubleValue() > 0;
             } else {
                 try {
-                    return Double.parseDouble((String) value) > 0;
+                    return Double.parseDouble(((String) value).trim()) > 0;
                 } catch (NumberFormatException e) {
                     return false;
                 }
