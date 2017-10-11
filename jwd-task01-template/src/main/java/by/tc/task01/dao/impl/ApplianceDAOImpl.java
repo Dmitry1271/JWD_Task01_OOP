@@ -51,7 +51,7 @@ public class ApplianceDAOImpl implements ApplianceDAO {
     }
 
     private static <E> boolean isFound(Criteria<E> criteria, String criteriaType, String line) {
-        if (!line.contains(criteriaType)) {
+        if (!line.matches("^" + criteriaType + " : .+;$")) {
             return false;
         }
 
