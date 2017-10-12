@@ -61,6 +61,11 @@ public class ApplianceDAOImpl implements ApplianceDAO {
 
         for (Object key : allCriteria.keySet()) {
             value = ParameterValueFounder.findValue(line, key.toString());
+
+            if(allCriteria.get(key) instanceof Double){
+                value = String.valueOf(Double.parseDouble(value));
+            }
+
             if (!value.equalsIgnoreCase(String.valueOf(allCriteria.get(key)).trim())) {
                 return false;
             }
