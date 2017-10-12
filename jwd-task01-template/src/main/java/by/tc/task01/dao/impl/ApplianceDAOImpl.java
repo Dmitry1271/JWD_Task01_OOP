@@ -16,17 +16,18 @@ import java.util.List;
 import java.util.Map;
 
 public class ApplianceDAOImpl implements ApplianceDAO {
-    private static final String path = "D:\\JavaProjects\\training\\JWD_Task01_OOP\\jwd-task01-template\\src\\main\\resources\\appliances_db.txt";
+    private static final String path = "appliances_db.txt";
 
     @Override
     public <E> Appliance find(Criteria<E> criteria) {
         String applianceType = criteria.getApplianceType();
         BufferedReader bufferedReader = null;
+        ClassLoader classLoader = getClass().getClassLoader();
         Appliance appliance = null;
         Command command = new ApplianceDirector().getCommand(applianceType);
         ParserCommand parserCommand = new ParseDirector().getParserCommand(applianceType);
         try {
-            bufferedReader = new BufferedReader(new FileReader(path));
+            bufferedReader = new BufferedReader(new FileReader(classLoader.getResource(path).getFile()));
             String line;
 
             while ((line = bufferedReader.readLine()) != null) {
