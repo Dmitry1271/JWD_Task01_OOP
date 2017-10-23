@@ -12,11 +12,12 @@ import by.tc.task01.entity.criteria.Criteria;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
 
 public class ApplianceDAOImpl implements ApplianceDAO {
-    private static final String path = "appliances_db.txt";
+    private static final String path = "/appliances_db.txt";
 
     @Override
     public <E> Appliance find(Criteria<E> criteria) {
@@ -27,7 +28,7 @@ public class ApplianceDAOImpl implements ApplianceDAO {
         Command command = new ApplianceDirector().getCommand(applianceType);
         ParserCommand parserCommand = new ParseDirector().getParserCommand(applianceType);
         try {
-            bufferedReader = new BufferedReader(new FileReader(classLoader.getResource(path).getFile()));
+            bufferedReader = new BufferedReader(new InputStreamReader(ApplianceDAO.class.getResourceAsStream(path)));
             String line;
 
             while ((line = bufferedReader.readLine()) != null) {
